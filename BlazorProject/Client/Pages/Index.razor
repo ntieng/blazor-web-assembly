@@ -13,7 +13,9 @@
 
 @if (Employees != null)
 {
-    <SfGrid DataSource="@Employees">
+    <SfGrid DataSource="@Employees" AllowPaging="true">
+        <GridPageSettings PageSize="10" PageCount="5" PageSizes="@pagerDropdown">
+        </GridPageSettings>
         <GridColumns>
             <GridColumn Field=@nameof(Employee.EmployeeId) HeaderText="ID"></GridColumn>
             <GridColumn Field=@nameof(Employee.FirstName) HeaderText="First Name"></GridColumn>
@@ -24,6 +26,7 @@
 }
 
 @code{
+    string[] pagerDropdown = new string[] { "All", "5", "10", "15", "20" };
     public List<Employee> Employees { get; set; } = null;
 
     [Inject]
@@ -34,7 +37,6 @@
     protected override async Task OnInitializedAsync()
     {
         SpinnerVisible = true;
-        await Task.Delay(3000);
         Employees = (await EmployeeService.GetEmployees()).ToList();
         SpinnerVisible = false;
     }
